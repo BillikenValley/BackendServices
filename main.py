@@ -40,8 +40,13 @@ def main(argv):
         elif opt in ("-s", "--shelters"):
             shelter_objects = arg
 
-    #f = open('testuser2.txt', 'r') #use this if you want to read a user from a file instead
-    #user_objects = f.read()
+    f = open('testuser2.txt', 'r') #use this if you want to read a user from a file instead
+    user_objects = f.read()
+    f.close()
+    g = open('testshelter2.txt','r')
+    shelter_objects = g.read()
+    g.close()
+
 
     if user_objects and shelter_objects:
         shelter_dictionaries = json.loads(shelter_objects)
@@ -50,7 +55,7 @@ def main(argv):
 
             location = getUserLoc(users_dict)
             rank = match.computeRank(users_dict,shelter, minutesSinceMidnight, location)
-
+            
             if rank >= 0:
                 if rank not in returnShelters.keys():
                     returnShelters[rank] = shelter

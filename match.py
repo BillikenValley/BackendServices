@@ -40,16 +40,24 @@ def computeRank(party, shelter, current_time, location):
     # Return -1 if ineligible, else return distance to shelter
 
     # Check if shelter is open
-    if shelter["closing_time"] > 0:
+    shelt_schedule = shelter["ShelterSchedule"]["OpenTimes"]
+    openTime = -1
+    closeTime = -1
+    print shelt_schedule
+    if len(shelt_schedule) > 0:
+        openTime = shelt_schedule
+        closeTime = shelt_schedule[1]
+
+    if openTime > 0 and closeTime > 0:
         # Shelter is not 24/7
-        if current_time > shelter["closing_time"] or current_time < shelter["opening"]:
+        if current_time > closeTime or current_time < openTime:
             # Shelter is closed
             return -1
-        TimeUntilClose = shelter["closing_time"] - current_time
+        TimeUntilClose = closeTime - current_time
 
     # Check if there are the right number of beds available
     num_open_beds = 0
-    for bed in shelter["beds"]:
+    for bed in shelter["CurrentStatus"]["Beds"]:
         if bed == 0:
             num_open_beds += 1
     if num_open_beds < len(party):
