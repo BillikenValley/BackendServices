@@ -37,11 +37,21 @@ def can_take_individual(person, shelter):
     return True
     
 def computeRank(party, shelter, current_time, location):
-    # Return -1 if ineligible, else return distance to shelter in miles
+    # Return -1 if ineligible, else return distance to shelter
 
     # Check if shelter is open
-    if current_time < shelter["closing_time"] or current_time < shelter["opening"]:
-        # Shelter is closed
+    if shelter["closing_time"] > 0:
+        # Shelter is not 24/7
+        if current_time < shelter["closing_time"] or current_time < shelter["opening"]:
+            # Shelter is closed
+            return -1
+        
+    # Check if there are the right number of beds available
+    num_open_beds = 0
+    for bed in shelter["beds"]:
+        if bed == 0:
+            num_open_beds += 1
+    if num_open_beds < len(party):
         return -1
     
     # Check if shelter takes a party of the specified demographics
@@ -54,7 +64,8 @@ def computeRank(party, shelter, current_time, location):
         if person["sex"] == "female" and not shelter["accepts_single_women"]:
             return -1
     else:
-        # Party contains more than one person
+        # Party contains more than one person; run through rules for the individuals, then for parties
+        
         # Check individual requirements for each party member and count the number of children, adult males and adult females
         num_men = 0
         num_women = 0
@@ -73,11 +84,20 @@ def computeRank(party, shelter, current_time, location):
                     num_women += 1
                     if person["is_pregnant"]
                         num_pregnancies += 1
+    
         # Check maternity & family requirements
         if num_children > shelter["max_children"]:
+            # Shelter cannot take this many children at once; not a match
             return -1
-        if shelter["accepts_pregnant_women"] and num_pregnancies == 0:
+        if shelter["must_be_pregnant"] and num_pregnancies == 0:
+            # Party must include at least one pregnant woman; not a match
             return -1
-                                     
+
+        # Check for rules on mixed-sex parties
+        if (not shelter["accepts_single_men"] and num_women == 0:
+            return -1
+        if (not shelter["accepts_single_women"] and num_men == 0:
+            return -1
+        
         # Shelter can accept this party; return the distance to it as its desirability score
         return dist_between(location, shelter["location"])
