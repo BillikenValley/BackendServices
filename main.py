@@ -3,8 +3,8 @@ import getopt
 import json
 import random
 import datetime #get the elapsed minutes since midnight
-import match
 
+import match
 
 def getUserLoc(users_dict):
     lat = users_dict["UserStatus"]["Location"]["Lat"]
@@ -15,6 +15,7 @@ def getUserLoc(users_dict):
 def main(argv):
 
     #to do: coordinate and test i/o with David's API
+    #why won't JSON objects load properly?
 
     #initialize everything to null
     user_objects = None
@@ -41,19 +42,18 @@ def main(argv):
         elif opt in ("-s", "--shelters"):
             shelter_objects = arg
 
-    print getUserLoc(json.loads(user_objects))
+    #f = open('testuser2.txt', 'r')
+    #user_objects = f.read()
+    #print user_objects
+    #print getUserLoc(json.loads(user_objects))
 
     if user_objects and shelter_objects:
-        for shelter in shelter_objects: #for each shelter in the list
+        shelter_dictionaries = json.loads(shelter_objects)
+        users_dict = json.loads(user_objects)
+        for shelter in shelter_dictionaries: #for each shelter in the list
 
-            #dummy code
-            #users_dict = user_objects
-            #shelter_dict = shelter
-            #rank = 1
-
-            users_dict = json.loads(user_objects)
-            shelter_dict = json.loads(shelter)
-            rank = computeRank(users_dict,shelter_dict, minutesSinceMidnight, getUserLoc(users_dict))
+            location = getUserLoc(users_dict)
+            rank = match.computeRank(users_dict,shelter, minutesSinceMidnight, location)
 
 
             if rank >= 0:
@@ -67,7 +67,7 @@ def main(argv):
         bestShelters = [value for (key, value) in sorted(returnShelters.items(), reverse=True)]
 
         matches  = {"Party": users_dict, "Shelters": bestShelters}
-        print matches #unicode?
+        print json.dumps(matches) #unicode?
 
 if __name__ == "__main__":
    main(sys.argv[1:])
