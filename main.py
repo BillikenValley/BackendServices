@@ -7,9 +7,7 @@ import datetime #get the elapsed minutes since midnight
 import match
 
 def getUserLoc(users_dict):
-    lat = users_dict["CurrentStatus"]["Location"]["Lat"]
-    longitude = users_dict["CurrentStatus"]["Location"]["Lng"]
-    return [lat, longitude]
+    return users_dict["CurrentStatus"]["Location"]
 
 
 def main(argv):

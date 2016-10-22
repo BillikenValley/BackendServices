@@ -42,9 +42,10 @@ def computeRank(party, shelter, current_time, location):
     # Check if shelter is open
     if shelter["closing_time"] > 0:
         # Shelter is not 24/7
-        if current_time < shelter["closing_time"] or current_time < shelter["opening"]:
+        if current_time > shelter["closing_time"] or current_time < shelter["opening"]:
             # Shelter is closed
             return -1
+        TimeUntilClose = shelter["closing_time"] - current_time
 
     # Check if there are the right number of beds available
     num_open_beds = 0
@@ -100,4 +101,23 @@ def computeRank(party, shelter, current_time, location):
             return -1
 
         # Shelter can accept this party; return the distance to it as its desirability score
-        return dist_between(location, shelter["location"])
+        #return dist_between(location, shelter["location"])
+        return dist_between(location, shelter["location"]) + TimeUntilClose + num_open_beds - len(party)
+
+def dist_between(location1, location2): #compute longitude-latitude distance between two points
+    loc1 = [location1["Lat"], location1["Lng"]]
+    loc2 = [location2["Lat"], location2["Lng"]]
+    userLat = math.radians(loc1[0])
+    userLong = math.radians(loc1[1])
+
+    shelterLat = math.radians(loc2[0])
+    shelterLong = math.radians(loc2[1])
+
+    dLon = shelterLong - userLong
+    dLat = shelterLat - userLat
+
+    R = 6373.0 #approx radius of earth
+    a = sin(dLat / 2)**2 + cos(userLat) * cos(shelterLat) * sin(dLon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+    return R*c
