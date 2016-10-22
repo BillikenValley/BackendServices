@@ -1,5 +1,5 @@
 def relevant(booltype):
-    # Determines if 
+    # Determines if
     return not (booltype == 0)
 
 def can_take_individual(person, shelter):
@@ -9,7 +9,7 @@ def can_take_individual(person, shelter):
     # Check gender and age requirements
     max_age = max(shelter["max_male_age"], shelter["max_female_age"])
     min_age = min(shelter["min_male_age"], shelter["min_female_age"])
-    
+
     if person["sex"] == "male" and person["gender"] == "male":
         # Male and not trans
         if (not shelter["accepts_men"]) or shelter["max_male_age"] < person["age"] or shelter["min_male_age"] > person["age"]:
@@ -27,15 +27,15 @@ def can_take_individual(person, shelter):
         else:
             # Use person's gender identity instead of birth sex
             if person["gender"] == "male":
-                return (person["age"] >= shelter["min_male_age"]) and (person["age"] <= shelter["max_male_age"]) 
+                return (person["age"] >= shelter["min_male_age"]) and (person["age"] <= shelter["max_male_age"])
             elif person["gender"] == "female":
-                return (person["age"] >= shelter["min_female_age"]) and (person["age"] <= shelter["max_female_age"]) 
+                return (person["age"] >= shelter["min_female_age"]) and (person["age"] <= shelter["max_female_age"])
             else:
                 # gender == "other"
                 return (person["age"] <= max_age) or (person["age"] >= min_age)
     # True by process of elimination
     return True
-    
+
 def computeRank(party, shelter, current_time, location):
     # Return -1 if ineligible, else return distance to shelter
 
@@ -45,7 +45,7 @@ def computeRank(party, shelter, current_time, location):
         if current_time < shelter["closing_time"] or current_time < shelter["opening"]:
             # Shelter is closed
             return -1
-        
+
     # Check if there are the right number of beds available
     num_open_beds = 0
     for bed in shelter["beds"]:
@@ -53,7 +53,7 @@ def computeRank(party, shelter, current_time, location):
             num_open_beds += 1
     if num_open_beds < len(party):
         return -1
-    
+
     # Check if shelter takes a party of the specified demographics
     if len(party) == 1:
         # Match the lone individual's demographics
@@ -65,7 +65,7 @@ def computeRank(party, shelter, current_time, location):
             return -1
     else:
         # Party contains more than one person; run through rules for the individuals, then for parties
-        
+
         # Check individual requirements for each party member and count the number of children, adult males and adult females
         num_men = 0
         num_women = 0
@@ -82,9 +82,9 @@ def computeRank(party, shelter, current_time, location):
                     num_men += 1
                 elif person["gender"] == "female":
                     num_women += 1
-                    if person["is_pregnant"]
+                    if person["is_pregnant"]:
                         num_pregnancies += 1
-    
+
         # Check maternity & family requirements
         if num_children > shelter["max_children"]:
             # Shelter cannot take this many children at once; not a match
@@ -94,10 +94,10 @@ def computeRank(party, shelter, current_time, location):
             return -1
 
         # Check for rules on mixed-sex parties
-        if (not shelter["accepts_single_men"] and num_women == 0:
+        if (not shelter["accepts_single_men"] and num_women == 0):
             return -1
-        if (not shelter["accepts_single_women"] and num_men == 0:
+        if (not shelter["accepts_single_women"] and num_men == 0):
             return -1
-        
+
         # Shelter can accept this party; return the distance to it as its desirability score
         return dist_between(location, shelter["location"])
