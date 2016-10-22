@@ -24,7 +24,8 @@ def main(argv):
             users_dict = json.loads(user_objects)
             shelter_dict = json.loads(shelter)
             rank = computeRank(users_dict,shelter_dict)
-            returnObj['shelter by id'] = rank #amend this line later when data model is finalized
+            if rank >= 0:
+                returnObj['shelter by id'] = rank #amend this line later when data model is finalized
         print sorted(returnObj, key=returnObj.__getitem__, reverse=True) #unicode?
 
 if __name__ == "__main__":
