@@ -7,20 +7,32 @@ def can_take_individual(person, shelter):
     # (There may be additional party requirements for the whole party)
 
     # Check gender and age requirements
+    max_age = max(shelter["max_male_age"], shelter["max_female_age"])
+    min_age = min(shelter["min_male_age"], shelter["min_female_age"])
+    
     if person["sex"] == "male" and person["gender"] == "male":
-        # Single male and not trans
+        # Male and not trans
         if (not shelter["accepts_men"]) or shelter["max_male_age"] < person["age"] or shelter["min_male_age"] > person["age"]:
             # Person is not in the right age range for their gender; return false
             return False
     elif person["sex"] == "female" and person["gender"] == "female":
-        # Single female and not trans
+        # Female and not trans
         if (not shelter["accepts_women"]) or shelter["max_female_age"] < person["age"] or shelter["min_female_age"] > person["age"]:
             # Person is not in the right age range for their gender; return false
             return False
     else:
-        # Person is transgender/intersex; see if shelter deals with those people
+        # Person is transgender/intersex; see if shelter deals with such people
         if not shelter["trans_friendy"]:
             return False
+        else:
+            # Use person's gender identity instead of birth sex
+            if person["gender"] == "male":
+                return (person["age"] >= shelter["min_male_age"]) and (person["age"] <= shelter["max_male_age"]) 
+            elif person["gender"] == "female":
+                return (person["age"] >= shelter["min_female_age"]) and (person["age"] <= shelter["max_female_age"]) 
+            else:
+                # gender == "other"
+                return (person["age"] <= max_age) or (person["age"] >= min_age)
     # True by process of elimination
     return True
     
