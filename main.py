@@ -7,9 +7,9 @@ import datetime #get the elapsed minutes since midnight
 import match
 
 def getUserLoc(users_dict):
-    lat = users_dict["UserStatus"]["Location"]["Lat"]
-    longitude = users_dict["UserStatus"]["Location"]["Lng"]
-    return [latitude, longitude]
+    lat = users_dict["CurrentStatus"]["Location"]["Lat"]
+    longitude = users_dict["CurrentStatus"]["Location"]["Lng"]
+    return [lat, longitude]
 
 
 def main(argv):
@@ -42,10 +42,8 @@ def main(argv):
         elif opt in ("-s", "--shelters"):
             shelter_objects = arg
 
-    #f = open('testuser2.txt', 'r')
+    #f = open('testuser2.txt', 'r') #use this if you want to read a user from a file instead
     #user_objects = f.read()
-    #print user_objects
-    #print getUserLoc(json.loads(user_objects))
 
     if user_objects and shelter_objects:
         shelter_dictionaries = json.loads(shelter_objects)
@@ -54,7 +52,6 @@ def main(argv):
 
             location = getUserLoc(users_dict)
             rank = match.computeRank(users_dict,shelter, minutesSinceMidnight, location)
-
 
             if rank >= 0:
                 if rank not in returnShelters.keys():
