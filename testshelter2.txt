@@ -1,0 +1,1 @@
+[	{	"Id": 42,	"Requirements": [],	"CurrentStatus": {	"Beds": [	0,	1,	2	],	"Occupants": [	{}	],	"LastUpdated": "2016-10-22T18:48:08+00:00"	},	"Credentials": [],	"Archive": [],	"Location": {	"Address": "1 Brookings Drive",	"Lat": 111,	"Lng": 111	},	"ShelterSchedule": {	"OpenTimes": []	}	}	]
