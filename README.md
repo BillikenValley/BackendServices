@@ -28,3 +28,6 @@ THE ALGORITHM:
 	creating a sorted list of CoC locations
 
 	3. Return sorted list OR inform user of no matches
+
+Requirements for JSON data model objects included here:
+http://pastebin.com/N8Kdy44B
