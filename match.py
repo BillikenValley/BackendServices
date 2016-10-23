@@ -97,11 +97,13 @@ def computeRank(party, shelter, current_time, location):
 
 
     # Check if there are the right number of beds available
+
+    #
     num_open_beds = 0
-    for bed in shelter["beds"]:
-        if bed == 0:
-            num_open_beds += 1
-    #print num_open_beds
+    max_beds = shelter["max_beds"]
+
+    num_open_beds = max_beds - len(shelter["beds"])
+
     if num_open_beds < len(party):
         #print "not enough beds"
         return -1
