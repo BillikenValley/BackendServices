@@ -124,6 +124,7 @@ def computeRank(party, shelter, current_time, location):
     else:
         # Party contains more than one person; run through rules for the individuals, then for parties
 
+        max_children = shelter.get("constraints").get("max_children",100)
         # Check individual requirements for each party member and count the number of children, adult males and adult females
         num_men = 0
         num_women = 0
