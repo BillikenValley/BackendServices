@@ -56,7 +56,6 @@ def main(argv):
         for shelter in shelter_dictionaries: #for each shelter in the list
             location = json.loads(location_obj)
             rank = match.computeRank(users_dict,shelter, minutesSinceMidnight, location)
-
             if rank >= 0:
                 returnShelters[shelter["uuid"]] = rank
 

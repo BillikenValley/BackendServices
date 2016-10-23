@@ -51,7 +51,7 @@ def can_take_individual(person, shelter):
             return False
     else:
         # Person is transgender/intersex; see if shelter deals with such people
-        if not trans_friendy:
+        if not trans_friendly:
             return False
         else:
             # Use person's gender identity instead of birth sex
