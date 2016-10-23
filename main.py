@@ -6,10 +6,6 @@ import datetime #get the elapsed minutes since midnight
 
 import match
 
-def getUserLoc(users_dict):
-    return users_dict["CurrentStatus"]["Location"]
-
-
 def main(argv):
 
     #to do: coordinate and test i/o with David's API
@@ -27,7 +23,7 @@ def main(argv):
     minutesSinceMidnight = (now - midnight).seconds/60
 
     try:
-        opts, args = getopt.getopt(argv,"hu:s:l:",["users=","shelters="])
+        opts, args = getopt.getopt(argv,"hu:s:l:",["users=","shelters=", "location="])
     except getopt.GetoptError:
         print 'mainScript.py -u <userObjects> -s <shelterObjects>'
         sys.exit(2)
@@ -39,35 +35,34 @@ def main(argv):
             user_objects = arg
         elif opt in ("-s", "--shelters"):
             shelter_objects = arg
+        elif opt in ("-l", "--location"):
+            location_obj = arg
 
+    #TEST CODE
     f = open('testuser2.txt', 'r') #use this if you want to read a user from a file instead
     user_objects = f.read()
     f.close()
     g = open('testshelter2.txt','r')
     shelter_objects = g.read()
     g.close()
+    #END TEST CODE
 
 
     if user_objects and shelter_objects:
         shelter_dictionaries = json.loads(shelter_objects)
         users_dict = json.loads(user_objects)
         for shelter in shelter_dictionaries: #for each shelter in the list
-
-            location = getUserLoc(users_dict)
+            location = json.loads(location_obj)
             rank = match.computeRank(users_dict,shelter, minutesSinceMidnight, location)
-            
+
             if rank >= 0:
-                if rank not in returnShelters.keys():
-                    returnShelters[rank] = shelter
-                else:
-                    while rank in returnShelters.keys(): #break ties if the rank is already a hash key
-                        rank+= random.randint(-1,1)
-                    returnShelters[rank] = shelter
+                returnShelters[shelter["uuid"]] = rank
 
-        bestShelters = [value for (key, value) in sorted(returnShelters.items(), reverse=True)]
+        bestShelters = sorted(returnShelters, key=returnShelters.__getitem__)
 
-        matches  = {"Party": users_dict, "Shelters": bestShelters}
-        print json.dumps(matches) #unicode?
+        if len(bestShelters) > 15:
+            bestShelters = bestShelters[:,15] #truncate the error
+        print bestShelters
 
 if __name__ == "__main__":
    main(sys.argv[1:])
