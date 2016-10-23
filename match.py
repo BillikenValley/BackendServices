@@ -10,6 +10,12 @@ def can_take_individual(person, shelter):
     # (There may be additional party requirements for the whole party)
     requirements = shelter.get("constraints", None)
 
+    """if len(requirements) == 0: #if there are no requirements
+        return True
+
+    if requirements == None:
+        return True"""
+
     accepts_men = requirements.get("accepts_men", 1)
     accepts_single_men = requirements.get("accepts_single_men",1)
     max_male_age = requirements.get("max_male_age",1000)
@@ -158,6 +164,7 @@ def computeRank(party, shelter, current_time, location):
 
         # Shelter can accept this party; return the distance to it as its desirability score
         #return dist_between(location, shelter["location"])
+
     return dist_between(location, shelter.get("location"))
 
 def dist_between(location1, location2): #compute longitude-latitude distance between two points
