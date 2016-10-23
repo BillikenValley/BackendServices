@@ -25,11 +25,11 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv,"hu:s:l:",["users=","shelters=", "location="])
     except getopt.GetoptError:
-        print 'mainScript.py -u <userObjects> -s <shelterObjects>'
+        print 'mainScript.py -u <requester> -s <shelter> -l <location>'
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print 'mainScript.py -u <userObjects> -s <shelterObjects>'
+            print 'mainScript.py -u <requester> -s <shelter> -l <location>'
             sys.exit()
         elif opt in ("-u", "--users"):
             user_objects = arg
