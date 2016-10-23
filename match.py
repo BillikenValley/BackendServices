@@ -37,14 +37,14 @@ def can_take_individual(person, shelter):
     min_age = min(min_male_age, min_female_age)
 
 
-    if person.get("sex", "Male") == "Male" and person.get("gender", "Male") == "Male":
+    if person.get("sex", 1) == 1 and person.get("gender", 1) == 1:
         # Male and not trans
         if (not accepts_men) or max_male_age < person.get("age",10) or min_male_age > person.get("age", 10):
             # Person is not in the right age range for their gender; return false
             return False
         if must_be_pregnant:
             return False
-    elif person.get("sex", "Female") == "Female" and person.get("gender", "Female") == "Female":
+    elif person.get("sex", 2) == 2 and person.get("gender", 2) == 2:
         # Female and not trans
         if (not accepts_women) or max_female_age < person.get("age",10) or min_female_age > person.get("age",10):
             # Person is not in the right age range for their gender; return false
@@ -55,9 +55,9 @@ def can_take_individual(person, shelter):
             return False
         else:
             # Use person's gender identity instead of birth sex
-            if person.get("gender", "Male") == "Male":
+            if person.get("gender", 1) == 1:
                 return (person.get("age", 30) >= min_male_age) and (person.get("age", 30) <= max_male_age)
-            elif person.get("gender", "Female") == "Female":
+            elif person.get("gender", 2) == 2:
                 return (person.get("age", 20) >= min_female_age) and (person.get("age", 20) <= max_female_age)
             else:
                 # gender == "other"
@@ -115,10 +115,10 @@ def computeRank(party, shelter, current_time, location):
             if not can_take_individual(party[0], shelter):
                 #print 'ineligible'
                 return -1
-            if party[0].get("sex", "Male") == "Male" and not shelter.get("constraints").get("accepts_single_men",1):
+            if party[0].get("sex", 1) == 1 and not shelter.get("constraints").get("accepts_single_men",1):
                 #print 'no men'
                 return -1
-            if party[0].get("sex", "Female") == "Female" and not shelter.get("constraints").get("accepts_single_women",1):
+            if party[0].get("sex", 2) == 2 and not shelter.get("constraints").get("accepts_single_women",1):
                 #print 'no women'
                 return -1
     else:
@@ -137,9 +137,9 @@ def computeRank(party, shelter, current_time, location):
             if person.get("age", 20) < 18:
                 num_children += 1
             else:
-                if person.get("gender", "Male") == "Male":
+                if person.get("gender", 1) == 1:
                     num_men += 1
-                elif person.get("gender", "Female") == "Female":
+                elif person.get("gender", 2) == 2:
                     num_women += 1
                     if person.get("is_pregnant", 0):
                         num_pregnancies += 1
