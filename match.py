@@ -1,3 +1,5 @@
+import datetime
+
 def relevant(booltype):
     # Determines if
     return not (booltype == 0)
@@ -69,8 +71,15 @@ def computeRank(party, shelter, current_time, location):
     # Return -1 if ineligible, else return distance to shelter
 
     # Check if shelter is open
-    openTime = shelter["open_time"]
-    closeTime = shelter["close_time"]
+    openTime = shelter["open_time"].split('.')[0]
+    openTime = datetime.datetime.strptime(openTime, "%Y-%m-%dT%H:%M:%S")
+    closeTime = shelter["close_time"].split('.')[0]
+    closeTime = datetime.datetime.strptime(closeTime, "%Y-%m-%dT%H:%M:%S")
+
+    now = datetime.datetime.now()
+    midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    openTime = (openTime - midnight).seconds/60
+    closeTime = (closeTime -midnight).seconds/60
 
     if openTime > 0 and closeTime > 0:
         # Shelter is not 24/7
@@ -82,7 +91,7 @@ def computeRank(party, shelter, current_time, location):
 
     # Check if there are the right number of beds available
     num_open_beds = 0
-    for bed in shelter["Beds"]:
+    for bed in shelter["beds"]:
         if bed == 0:
             num_open_beds += 1
 
