@@ -39,13 +39,13 @@ def main(argv):
             location_obj = arg
 
     #TEST CODE
-    f = open('testuser.txt', 'r') #use this if you want to read a user from a file instead
+    f = open(user_objects, 'r') #use this if you want to read a user from a file instead
     user_objects = f.read()
     f.close()
-    g = open('testshelter.txt','r')
+    g = open(shelter_objects,'r')
     shelter_objects = g.read()
     g.close()
-    h = open('testLoc.txt', 'r')
+    h = open(location_obj, 'r')
     location_obj = h.read()
     #END TEST CODE
 
