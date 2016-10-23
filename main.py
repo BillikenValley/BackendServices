@@ -58,7 +58,7 @@ def main(argv):
             rank = match.computeRank(users_dict,shelter, minutesSinceMidnight, location)
 
             if rank >= 0:
-                returnShelters[shelter["uuid"]] = rank
+                returnShelters[shelter["ID"]] = rank
 
         bestShelters = sorted(returnShelters, key=returnShelters.__getitem__)
 
