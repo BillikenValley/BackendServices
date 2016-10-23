@@ -126,6 +126,8 @@ def computeRank(party, shelter, current_time, location):
 
         max_children = shelter.get("constraints").get("max_children",100)
         must_be_pregnant = shelter.get("constraints").get("must_be_pregnant", 0)
+        accepts_single_men = shelter.get("constraints").get("accepts_single_men",1)
+        accepts_single_women = shelter.get("constraints").get("accepts_single_women",1)
         # Check individual requirements for each party member and count the number of children, adult males and adult females
         num_men = 0
         num_women = 0
